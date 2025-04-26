@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nadeline AI 🌟</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background: black;
+            color: gold;
+            overflow: hidden;
+        }
+
+        /* Particle background */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Intro */
+        #intro {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: black;
+            color: gold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: shake 1s infinite alternate;
+            z-index: 10;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(3px, -3px); }
+            50% { transform: translate(-3px, 3px); }
+            75% { transform: translate(3px, 3px); }
+            100% { transform: translate(-3px, -3px); }
+        }
+
+        /* Chat section */
+        #chat {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        #chatbox {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .message {
+            margin: 10px 0;
+            max-width: 80%;
+        }
+
+        .user {
+            text-align: right;
+            color: white;
+        }
+
+        .bot {
+            text-align: left;
+            color: gold;
+        }
+
+        #inputArea {
+            display: flex;
+            background: #111;
+            padding: 10px;
+            align-items: center;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        #sendBtn {
+            background: gold;
+            color: black;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        #sendBtn:hover {
+            background: #ffcc00;
+        }
+
+        /* Loading */
+        .loading {
+            font-style: italic;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Particle Background -->
+<div id="particles-js"></div>
+
+<!-- Background Music -->
+<audio id="bg-music" autoplay loop hidden>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b2a4c1f0b7.mp3?filename=relaxing-ambient-11264.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Intro Screen -->
+<div id="intro">
+    <h1>Nadeline AI Booting Up...</h1>
+    <p id="loadingText"></p>
+</div>
+
+<!-- Chat Screen -->
+<div id="chat">
+    <div style="text-align:center; padding:10px; font-size:24px;">🤖 Nadeline AI 🌟</div>
+    <div id="chatbox"></div>
+    <div id="inputArea">
+        <input type="text" id="userInput" placeholder="Ask me anything...">
+        <button id="sendBtn" onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+<script>
+    // Particle Config
+    particlesJS("particles-js", {
+        "particles": {
+            "number": { "value": 80 },
+            "color": { "value": "#FFD700" },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.7 },
+            "size": { "value": 3 },
+            "move": { "speed": 1 }
+        }
+    });
+
+    // Intro Typing Animation
+    const loadingText = document.getElementById('loadingText');
+    const loadingPhrases = ["Waking Systems...", "Loading Memory...", "Calibrating Wisdom...", "Ready!"];
+    let index = 0;
+
+    function typeLoading() {
+        if (index < loadingPhrases.length) {
+            loadingText.innerHTML = loadingPhrases[index];
+            index++;
+            setTimeout(typeLoading, 1200);
+        } else {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('chat').style.display = 'flex';
+        }
+    }
+
+    window.onload = () => {
+        setTimeout(typeLoading, 1000);
+    };
+
+    // Chat Logic
+    function sendMessage() {
+        const input = document.getElementById("userInput");
+        const text = input.value.trim();
+        if (text === "") return;
+
+        // Add user's message
+        const userMsg = document.createElement('div');
+        userMsg.className = 'message user';
+        userMsg.innerText = text;
+        document.getElementById("chatbox").appendChild(userMsg);
+
+        // Bot loading
+        const botMsg = document.createElement('div');
+        botMsg.className = 'message bot loading';
+        botMsg.innerText = "Typing...";
+        document.getElementById("chatbox").appendChild(botMsg);
+
+        document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
+        input.value = "";
+
+        // Simulate reply
+        setTimeout(() => {
+            botMsg.classList.remove('loading');
+
+            let reply = generateReply(text);
+            botMsg.innerText = reply;
+            document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
+        }, 2000);
+    }
+
+    function generateReply(userText) {
+        userText = userText.toLowerCase();
+        if (userText.includes("nadeline")) {
+            return "🌟 Nadeline is the world's most sustainable futuristic city, filled with green technology, clean energy, smart systems, and innovation! 🚀";
+        } else if (userText.includes("hi") || userText.includes("hello")) {
+            return "Hey there! 👋 I'm Nadeline AI, your futuristic assistant. How can I help you today?";
+        } else if (userText.includes("features") || userText.includes("what can you do")) {
+            return "I can chat, answer questions, create ideas, inspire you, and help you learn more about Nadeline! 🌍✨";
+        } else {
+            return "Hmm... 🤔 Interesting! Let me think about that... Here's what I believe: " + "In the world of possibilities, there's always an answer. What else do you want to explore?";
+        }
+    }
+</script>
+
+</body>
+</html>
